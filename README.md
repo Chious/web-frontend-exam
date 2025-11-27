@@ -7,7 +7,9 @@
 ### 框架
 
 1. 語言：Javascript
-2. Framework：React.js
+2. Framework：
+   1. 必備：React.js 或 Vue.js 其一
+   2. 使用 React.js 或 Next.js 完成，將列為加分項目
 
 ### CSS
 
