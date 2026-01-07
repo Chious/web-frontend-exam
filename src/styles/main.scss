@@ -23,8 +23,8 @@ body {
   font-size: $font-size-base;
   font-weight: $font-weight-regular;
   line-height: $line-height-base;
-  color: $gray-900;
-  background-color: $gray-50;
+  color: $gray-1100;
+  background-color: $gray-200;
   min-height: 100vh;
 }
 
@@ -56,15 +56,181 @@ img {
 }
 
 // ===========================================
-// Main Container
+// Home Page
 // ===========================================
-.main {
-  @include flex-center;
+.home {
   min-height: 100vh;
+  background-color: $gray-200;
+}
+
+.hero-banner {
+  width: 100%;
+  overflow: hidden;
+
+  &__image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
+.home__content {
+  max-width: 600px;
+  margin: 0 auto;
   padding: $spacing-4;
-  font-size: $font-size-2xl;
-  font-weight: $font-weight-medium;
-  color: $gray-700;
+
+  @include md {
+    padding: $spacing-6;
+  }
+}
+
+// ===========================================
+// Section Title
+// ===========================================
+.section-title {
+  @include body-4-bold;
+  color: $gray-1100;
+  padding-left: $spacing-3;
+  margin-bottom: $spacing-4;
+  border-left: 4px solid $primary-color;
+}
+
+// ===========================================
+// Search Filters
+// ===========================================
+.search-filters {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  margin-bottom: $spacing-4;
+
+  @include sm {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  &__input {
+    flex: 1;
+    min-width: 200px;
+    background-color: $white;
+  }
+
+  &__select {
+    flex: 1;
+    min-width: 150px;
+    background-color: $white;
+  }
+
+  &__button {
+    background-color: $primary-color !important;
+    color: $white !important;
+    text-transform: none !important;
+    font-weight: $font-weight-bold !important;
+    padding: $spacing-2 $spacing-4 !important;
+
+    &:hover {
+      background-color: $primary-dark !important;
+    }
+  }
+}
+
+// ===========================================
+// Job List
+// ===========================================
+.job-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  margin-bottom: $spacing-4;
+
+  &__loading,
+  &__empty {
+    @include body-3-regular;
+    text-align: center;
+    color: $gray-700;
+    padding: $spacing-8;
+  }
+}
+
+// ===========================================
+// Job Card
+// ===========================================
+.job-card {
+  background-color: $white;
+  border: 1px solid $gray-400;
+  border-radius: $border-radius-base;
+  padding: $spacing-4;
+  @include transition(box-shadow);
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+
+  &__company {
+    @include body-3-bold;
+    color: $gray-1100;
+    margin-bottom: $spacing-2;
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    @include body-2-regular;
+    color: $gray-900;
+    margin-bottom: $spacing-1;
+  }
+
+  &__icon {
+    color: $gray-700;
+    font-size: 18px !important;
+  }
+
+  &__preview {
+    @include body-2-regular;
+    color: $gray-900;
+    margin-top: $spacing-2;
+    margin-bottom: $spacing-3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__link {
+    @include button-reset;
+    @include body-2-bold;
+    color: $primary-color;
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: $spacing-2 0;
+
+    &:hover {
+      color: $primary-dark;
+      text-decoration: underline;
+    }
+  }
+}
+
+// ===========================================
+// Pagination
+// ===========================================
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-4 0;
+}
+
+.pagination {
+  .MuiPaginationItem-root {
+    color: $gray-900;
+
+    &.Mui-selected {
+      background-color: $gray-400;
+      color: $gray-1100;
+    }
+  }
 }
 
 // ===========================================
@@ -94,4 +260,8 @@ img {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+.debug {
+  outline: 1px solid red;
 }

@@ -1,0 +1,230 @@
+@use "@/styles/variables" as *;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: $z-index-modal-backdrop;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(0 0 0 / 60%);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal {
+  position: relative;
+  z-index: $z-index-modal;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 720px;
+  max-height: 85vh;
+  overflow: hidden;
+  background-color: $white;
+  border-radius: $border-radius-xl;
+  box-shadow: $shadow-xl;
+  animation: slideUp 0.3s ease-out;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-5 $spacing-6;
+  background: white;
+  border-bottom: 1px solid $gray-300;
+
+  h2 {
+    @include body-5-bold;
+
+    margin: 0;
+    color: $gray-900;
+  }
+}
+
+.content {
+  flex: 1;
+  padding: $spacing-6;
+  overflow-y: auto;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: $spacing-4 $spacing-6;
+  background-color: $white;
+  border-top: 1px solid $gray-300;
+
+  .spacer {
+    flex: 1;
+  }
+
+  .footerBtn {
+    @include body-3-bold;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+    padding: $spacing-3 $spacing-6;
+    color: $gray-900;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    border-radius: $border-radius-base;
+    transition: all $transition-fast;
+
+    &:hover {
+      color: $gray-1100;
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+.jobHeader {
+  margin-bottom: $spacing-5;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-direction: row;
+  gap: $spacing-2;
+
+  h3 {
+    @include body-4-bold;
+
+    margin: 0 0 $spacing-1;
+    color: $gray-900;
+  }
+
+  h4 {
+    @include body-3-regular;
+
+    margin: 0;
+    color: $gray-900;
+  }
+}
+
+.swiperSection {
+  margin-bottom: $spacing-5;
+}
+
+.sectionTitle {
+  @include body-3-bold;
+
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  margin: 0 0 $spacing-3;
+  padding-bottom: $spacing-2;
+  color: $gray-1100;
+}
+
+.description {
+  @include body-2-regular;
+
+  line-height: $line-height-relaxed;
+  color: $gray-900;
+
+  h1,
+  h2,
+  h3 {
+    margin: $spacing-4 0 $spacing-2;
+    color: $gray-1100;
+  }
+
+  h1 {
+    @include body-4-bold;
+  }
+
+  h2 {
+    @include body-3-bold;
+  }
+
+  h3 {
+    @include body-2-bold;
+  }
+
+  ul,
+  ol {
+    padding-left: $spacing-5;
+    margin: $spacing-2 0;
+  }
+
+  li {
+    margin-bottom: $spacing-2;
+  }
+
+  p {
+    margin: $spacing-3 0;
+  }
+
+  a {
+    color: $primary-color;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $primary-dark;
+      text-decoration: underline;
+    }
+  }
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-4;
+  padding: $spacing-10;
+
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid $orange-200;
+    border-top-color: $primary-color;
+    border-radius: $border-radius-full;
+    animation: spin 0.8s linear infinite;
+  }
+
+  p {
+    @include body-2-regular;
+
+    margin: 0;
+    color: $gray-700;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

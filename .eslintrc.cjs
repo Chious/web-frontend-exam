@@ -23,7 +23,17 @@ module.exports = {
     "import/resolver": {
       alias: {
         map: [["@", "./src"]],
-        extensions: [".js", ".jsx", ".json"],
+        extensions: [
+          ".js",
+          ".jsx",
+          ".json",
+          ".png",
+          ".jpg",
+          ".jpeg",
+          ".svg",
+          ".gif",
+          ".webp",
+        ],
       },
     },
   },
@@ -49,5 +59,7 @@ module.exports = {
     "no-console": "warn",
     // 允許在箭頭函數中使用簡潔語法
     "arrow-body-style": ["error", "as-needed"],
+    // 忽略圖片等靜態資源的 import 錯誤（vite-imagetools 使用 query string）
+    "import/no-unresolved": ["error", { ignore: ["\\?"] }],
   },
 };

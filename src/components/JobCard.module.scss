@@ -1,0 +1,86 @@
+@use "@/styles/variables" as *;
+
+.jobCard {
+  border: 1px solid rgb(0 0 0 / 20%);
+  border-radius: $border-radius-base;
+  padding: $spacing-4;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    box-shadow: $shadow-md;
+  }
+}
+
+.jobCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  color: $gray-900;
+
+  h3 {
+    @include body-4-bold;
+
+    margin: 0;
+    color: $gray-1200;
+  }
+
+  h4 {
+    @include body-3-regular;
+
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    margin: 0;
+    color: $gray-1000;
+  }
+
+  p {
+    @include body-2-regular;
+
+    display: flex;
+    align-items: center;
+    gap: $spacing-2;
+    margin: 0;
+    color: $gray-800;
+  }
+
+  .icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+
+  h4 .icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .preview {
+    @include body-1-regular;
+
+    display: -webkit-box;
+    overflow: hidden;
+    color: $gray-700;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.viewMoreBtn {
+  align-self: flex-start;
+  width: 100%;
+  text-align: center;
+  padding: $spacing-2 0;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  color: $orange-700;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $gray-600;
+  }
+}

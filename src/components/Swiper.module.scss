@@ -1,0 +1,76 @@
+@use "@/styles/variables" as *;
+
+.swiper {
+  width: 100%;
+  user-select: none;
+}
+
+.swiperContainer {
+  position: relative;
+  overflow: hidden;
+  border-radius: $border-radius-lg;
+}
+
+.swiperTrack {
+  display: flex;
+  gap: $spacing-3;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.swiperSlide {
+  flex-shrink: 0;
+  width: 200px;
+  height: 120px;
+  overflow: hidden;
+  border-radius: $border-radius-base;
+  scroll-snap-align: start;
+  pointer-events: none;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform $transition-base;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+}
+
+.swiperNav {
+  display: flex;
+  gap: $spacing-2;
+  justify-content: center;
+  margin-top: $spacing-3;
+}
+
+.swiperDot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  cursor: pointer;
+  background-color: $gray-400;
+  border: none;
+  border-radius: $border-radius-full;
+  transition: all $transition-fast;
+
+  &:hover {
+    background-color: $gray-600;
+  }
+
+  &.active {
+    width: 24px;
+    background-color: $primary-color;
+  }
+}
