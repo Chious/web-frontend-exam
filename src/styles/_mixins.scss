@@ -1,0 +1,148 @@
+@use "sass:list";
+@use "sass:color";
+@use "variables" as *;
+
+// ===========================================
+// Breakpoint Mixins
+// ===========================================
+@mixin xs {
+  @media (min-width: $breakpoint-xs) {
+    @content;
+  }
+}
+
+@mixin sm {
+  @media (min-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+@mixin md {
+  @media (min-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @media (min-width: $breakpoint-xl) {
+    @content;
+  }
+}
+
+// ===========================================
+// Flexbox Mixins
+// ===========================================
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@mixin flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// ===========================================
+// Typography Mixins
+// ===========================================
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// ===========================================
+// Transition Mixin
+// ===========================================
+@mixin transition($properties...) {
+  $transitions: ();
+  @each $property in $properties {
+    $transitions: list.append($transitions, $property $transition-base, comma);
+  }
+  transition: $transitions;
+}
+
+// ===========================================
+// Button Reset
+// ===========================================
+@mixin button-reset {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// ===========================================
+// Card Mixin
+// ===========================================
+@mixin card {
+  background-color: $white;
+  border-radius: $border-radius-base;
+  box-shadow: $shadow-base;
+}
+
+// ===========================================
+// Scrollbar Styling
+// ===========================================
+@mixin custom-scrollbar(
+  $width: 8px,
+  $thumb-color: $gray-400,
+  $track-color: $gray-100
+) {
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+    border-radius: $border-radius-full;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+    border-radius: $border-radius-full;
+
+    &:hover {
+      background: color.adjust($thumb-color, $lightness: -10%);
+    }
+  }
+}
