@@ -30,7 +30,7 @@ npm install
 npm run dev
 ```
 
-開發伺服器將在 http://localhost:3000 啟動
+開發伺服器將在 http://localhost:3000/web-frontend-exam/ 啟動
 
 ### Docker 開發
 
