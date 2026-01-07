@@ -20,4 +20,15 @@ export default defineConfig({
     open: true,
     host: true,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          mui: ["@mui/material", "@emotion/react", "@emotion/styled"],
+          query: ["@tanstack/react-query"],
+        },
+      },
+    },
+  },
 });

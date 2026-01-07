@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, lazy, Suspense } from "react";
 import {
   fetchJobs,
   fetchEducationLevels,
@@ -15,13 +15,14 @@ import {
 } from "@mui/material";
 import Pageration from "@/components/Pageration";
 import JobCard from "@/components/JobCard";
-import Modal from "@/components/Modal";
 import mainBg from "@/assets/Background-01.png?w=1024&h=auto&format=webp";
 import leftEye from "@/assets/LeftEye-01.png?w=40&h=auto&format=webp";
 import rightEye from "@/assets/RightEye-01.png?w=40&h=auto&format=webp";
 import logo from "@/assets/Logo-01.png?w=1024&h=auto&format=webp";
 import character from "@/assets/Character-01.png?w=1024&h=auto&format=webp";
 import style from "./Home.module.scss";
+
+const Modal = lazy(() => import("@/components/Modal"));
 
 const PER_PAGE = 6;
 
@@ -205,11 +206,13 @@ export default function Home() {
           onPageChange={setCurrentPage}
         />
       </section>
-      <Modal
-        jobId={selectedJobId}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
+      <Suspense fallback={null}>
+        <Modal
+          jobId={selectedJobId}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      </Suspense>
     </div>
   );
 }
