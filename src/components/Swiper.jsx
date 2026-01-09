@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
+import { Skeleton } from "@mui/material";
 import style from "./Swiper.module.scss";
 
 /**
@@ -14,6 +15,9 @@ export default function Swiper({
   autoplayInterval = 3000,
 }) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [loadedStates, setLoadedStates] = useState(() =>
+    new Array(images.length).fill(false),
+  );
   const trackRef = useRef(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -21,6 +25,11 @@ export default function Swiper({
   const autoplayRef = useRef(null);
 
   const slideWidth = 212; // slide width (200px) + gap (12px)
+
+  // Reset image loaded states when images list changes
+  useEffect(() => {
+    setLoadedStates(new Array(images.length).fill(false));
+  }, [images]);
 
   const scrollToSlide = useCallback(
     (index) => {
@@ -188,11 +197,31 @@ export default function Swiper({
               key={`slide-${index}`}
               className={style.swiperSlide}
             >
+              {!loadedStates[index] && (
+                <Skeleton
+                  variant="rectangular"
+                  width={200}
+                  height={120}
+                  aria-hidden="true"
+                />
+              )}
+
               <img
                 src={image}
                 alt={`${alt} ${index + 1}`}
                 loading="lazy"
                 draggable="false"
+                onLoad={() =>
+                  setLoadedStates((prev) => {
+                    const next = [...prev];
+                    next[index] = true;
+                    return next;
+                  })
+                }
+                style={{
+                  opacity: loadedStates[index] ? 1 : 0,
+                  transition: "opacity 0.2s ease-out",
+                }}
               />
             </div>
           ))}

@@ -23,11 +23,10 @@ import style from "./Home.module.scss";
 
 const Modal = lazy(() => import("@/components/Modal"));
 
+const REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 const MOBILE_BREAKPOINT = 600;
 const PER_PAGE_MOBILE = 4;
 const PER_PAGE_DESKTOP = 6;
-
-// TODO: 3. Image Optmize
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
@@ -126,6 +125,7 @@ export default function Home() {
       }),
     enabled: isAuthenticated,
     placeholderData: (previousData) => previousData, // Keep previous data while loading
+    staleTime: REVALIDATE_TIME,
   });
 
   const totalPages = useMemo(() => {
@@ -142,12 +142,14 @@ export default function Home() {
     queryKey: ["educationLevels"],
     queryFn: () => fetchEducationLevels(),
     enabled: isAuthenticated,
+    staleTime: REVALIDATE_TIME,
   });
 
   const { data: salaryLevels } = useQuery({
     queryKey: ["salaryLevels"],
     queryFn: () => fetchSalaryLevels(),
     enabled: isAuthenticated,
+    staleTime: REVALIDATE_TIME,
   });
 
   return (

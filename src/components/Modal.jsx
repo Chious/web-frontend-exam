@@ -5,6 +5,8 @@ import { fetchJobById } from "@/utils/fetcher";
 import Swiper from "./Swiper";
 import style from "./Modal.module.scss";
 
+const REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
+
 /**
  * @param {Object} jobId - 工作ID
  * @param {boolean} isOpen - 是否開啟
@@ -17,6 +19,7 @@ export default function Modal({ jobId, isOpen, onClose }) {
     queryKey: ["jobDetail", jobId],
     queryFn: () => fetchJobById(jobId),
     enabled: isOpen && !!jobId,
+    staleTime: REVALIDATE_TIME,
   });
 
   const sanitizedDescription = useMemo(() => {
