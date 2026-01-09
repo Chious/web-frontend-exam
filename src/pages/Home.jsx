@@ -1,20 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState, useCallback, useMemo, lazy, Suspense } from "react";
+import {
+  useState,
+  useCallback,
+  useMemo,
+  lazy,
+  Suspense,
+  useEffect,
+} from "react";
 import {
   fetchJobs,
   fetchEducationLevels,
   fetchSalaryLevels,
 } from "@/utils/fetcher";
-import {
-  TextField,
-  Button,
-  Select,
-  InputLabel,
-  MenuItem,
-  FormControl,
-} from "@mui/material";
 import Pageration from "@/components/Pageration";
 import JobCard from "@/components/JobCard";
+import SearchBar from "@/components/SearchBar";
 import mainBg from "@/assets/Background-01.png?w=1024&h=auto&format=webp";
 import leftEye from "@/assets/LeftEye-01.png?w=40&h=auto&format=webp";
 import rightEye from "@/assets/RightEye-01.png?w=40&h=auto&format=webp";
@@ -24,9 +24,10 @@ import style from "./Home.module.scss";
 
 const Modal = lazy(() => import("@/components/Modal"));
 
-const PER_PAGE = 6;
+const MOBILE_BREAKPOINT = 600;
+const PER_PAGE_MOBILE = 4;
+const PER_PAGE_DESKTOP = 6;
 
-// TODO: 1. 優化 Job fetch 邏輯 and responsive for different device
 // TODO: 2. Background Animate
 // TODO: 3. Image Optmize
 
@@ -35,17 +36,50 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
 
-  // Search form state
-  const [companyName, setCompanyName] = useState("");
-  const [educationLevel, setEducationLevel] = useState("");
-  const [salaryLevel, setSalaryLevel] = useState("");
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < MOBILE_BREAKPOINT;
+    }
+    return false;
+  });
 
-  // Applied search filters (only update on submit)
+  // 控制搜尋列表：手機每頁 4 筆資料 / 平板 & 桌機：6 筆資料
+  const perPage = useMemo(
+    () => (isMobile ? PER_PAGE_MOBILE : PER_PAGE_DESKTOP),
+    [isMobile],
+  );
+
+  const [filterValues, setFilterValues] = useState({
+    companyName: "",
+    educationLevel: "",
+    salaryLevel: "",
+  });
+
   const [appliedFilters, setAppliedFilters] = useState({
     companyName: "",
     educationLevel: "",
     salaryLevel: "",
   });
+
+  // Unified setter for filter values
+  const setValue = useCallback((key, value) => {
+    setFilterValues((prev) => ({ ...prev, [key]: value }));
+  }, []);
+
+  // 監聽視窗大小變化，更新 isMobile 狀態
+  useEffect(() => {
+    const handleResize = () => {
+      const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT;
+      console.log("newIsMobile", newIsMobile);
+      if (newIsMobile !== isMobile) {
+        setIsMobile(newIsMobile);
+        setCurrentPage(1); // 重置到第一頁當裝置類型改變時
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isMobile]);
 
   const handleViewDetail = useCallback((jobId) => {
     setSelectedJobId(jobId);
@@ -59,39 +93,51 @@ export default function Home() {
   const handleSearch = useCallback(
     (e) => {
       e.preventDefault();
-      setAppliedFilters({
-        companyName,
-        educationLevel,
-        salaryLevel,
-      });
+      const newFilters = {
+        companyName: filterValues.companyName.trim(),
+        educationLevel: filterValues.educationLevel,
+        salaryLevel: filterValues.salaryLevel,
+      };
+      setAppliedFilters(newFilters);
       setCurrentPage(1);
     },
-    [companyName, educationLevel, salaryLevel],
+    [filterValues],
   );
 
-  // Check if any filter input has value
-  const hasFilterInput = useMemo(
-    () =>
-      companyName.trim() !== "" || educationLevel !== "" || salaryLevel !== "",
-    [companyName, educationLevel, salaryLevel],
-  );
-
-  const { data: jobs } = useQuery({
-    queryKey: ["jobs", currentPage, appliedFilters],
+  const {
+    data: jobs,
+    isLoading: isLoadingJobs,
+    isError: isErrorJobs,
+    error: jobsError,
+  } = useQuery({
+    queryKey: [
+      "jobs",
+      currentPage,
+      appliedFilters.companyName,
+      appliedFilters.educationLevel,
+      appliedFilters.salaryLevel,
+      perPage,
+    ],
     queryFn: () =>
       fetchJobs({
         page: currentPage,
-        prePage: PER_PAGE,
+        prePage: perPage,
         companyName: appliedFilters.companyName || undefined,
         educationLevel: appliedFilters.educationLevel || undefined,
         salaryLevel: appliedFilters.salaryLevel || undefined,
       }),
+    placeholderData: (previousData) => previousData, // Keep previous data while loading
   });
 
-  const totalPages = useMemo(
-    () => (jobs?.total ? Math.ceil(jobs.total / PER_PAGE) : 1),
-    [jobs?.total],
-  );
+  const totalPages = useMemo(() => {
+    // Use current total if available, otherwise use previous total
+    const total = jobs?.total;
+    if (total) {
+      return Math.ceil(total / perPage);
+    }
+    // Return 1 as fallback only if we never had data
+    return 1;
+  }, [jobs?.total, perPage]);
 
   const { data: educationLevels } = useQuery({
     queryKey: ["educationLevels"],
@@ -129,64 +175,43 @@ export default function Home() {
       </div>
       <section className={style.searchDashboard}>
         <h2 className={style.sectionTitle}>適合前端工程師的好工作</h2>
-        <form className={style.searchBar} onSubmit={handleSearch}>
-          <TextField
-            label="公司名稱"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
+        {!isMobile && (
+          <SearchBar
+            values={filterValues}
+            appliedFilters={appliedFilters}
+            setValue={setValue}
+            onSearch={handleSearch}
+            educationLevels={educationLevels}
+            salaryLevels={salaryLevels}
           />
-
-          <FormControl>
-            <InputLabel id="education-level-select-label">教育程度</InputLabel>
-            <Select
-              labelId="education-level-select-label"
-              id="education-level-select"
-              label="教育程度"
-              value={educationLevel}
-              onChange={(e) => setEducationLevel(e.target.value)}
-            >
-              <MenuItem value="">不限</MenuItem>
-              {educationLevels &&
-                educationLevels.map((level) => (
-                  <MenuItem key={level.id} value={level.id}>
-                    {level.label}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-
-          <FormControl>
-            <InputLabel id="salary-level-select-label">薪水範圍</InputLabel>
-            <Select
-              labelId="salary-level-select-label"
-              id="salary-level-select"
-              label="薪水範圍"
-              value={salaryLevel}
-              onChange={(e) => setSalaryLevel(e.target.value)}
-            >
-              <MenuItem value="">不限</MenuItem>
-              {salaryLevels &&
-                salaryLevels.map((level) => (
-                  <MenuItem key={level.id} value={level.id}>
-                    {level.label}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            className={style.searchBtn}
-            disabled={!hasFilterInput}
-          >
-            搜尋條件
-          </Button>
-        </form>
+        )}
 
         <div className={style.jobList}>
-          {jobs &&
+          {isLoadingJobs && !jobs && (
+            <div className={style.emptyState}>
+              <p>載入中...</p>
+            </div>
+          )}
+          {isErrorJobs && (
+            <div className={style.emptyState}>
+              <p className={style.errorText}>
+                載入失敗：{jobsError?.message || "發生錯誤，請稍後再試"}
+              </p>
+            </div>
+          )}
+          {!isLoadingJobs &&
+            !isErrorJobs &&
+            jobs &&
+            jobs.data &&
+            jobs.data.length === 0 && (
+              <div className={style.emptyState}>
+                <p>找不到符合條件的工作</p>
+              </div>
+            )}
+          {!isErrorJobs &&
+            jobs &&
+            jobs.data &&
+            jobs.data.length > 0 &&
             jobs.data.map((job) => (
               <JobCard
                 key={job.id}

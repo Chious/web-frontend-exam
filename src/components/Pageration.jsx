@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { useMemo } from "react";
 import style from "./Pageration.module.scss";
 
 const MAX_VISIBLE_PAGES = 5;
@@ -9,7 +9,7 @@ const MAX_VISIBLE_PAGES = 5;
  * @param {function} onPageChange - 頁數變更事件
  */
 export default function Pageration({ totalPages, currentPage, onPageChange }) {
-  const getPageNumbers = () => {
+  const pageNumbers = useMemo(() => {
     if (totalPages <= MAX_VISIBLE_PAGES) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
@@ -19,9 +19,7 @@ export default function Pageration({ totalPages, currentPage, onPageChange }) {
     const end = Math.min(start + MAX_VISIBLE_PAGES - 1, totalPages);
 
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  };
-
-  const pageNumbers = getPageNumbers();
+  }, [totalPages, currentPage]);
 
   const handlePrevious = () => {
     if (currentPage > 1) {
@@ -37,32 +35,30 @@ export default function Pageration({ totalPages, currentPage, onPageChange }) {
 
   return (
     <div className={style.pagination}>
-      <Button
-        variant="contained"
-        color="primary"
+      <button
+        type="button"
         onClick={handlePrevious}
         disabled={currentPage === 1}
       >
         &lt;
-      </Button>
+      </button>
       {pageNumbers.map((page) => (
-        <Button
+        <button
           key={`page-${page}`}
-          variant={currentPage === page ? "contained" : "outlined"}
-          color="primary"
+          className={currentPage === page ? style.active : ""}
           onClick={() => onPageChange(page)}
+          type="button"
         >
           {page}
-        </Button>
+        </button>
       ))}
-      <Button
-        variant="contained"
-        color="primary"
+      <button
+        type="button"
         onClick={handleNext}
         disabled={currentPage === totalPages}
       >
         &gt;
-      </Button>
+      </button>
     </div>
   );
 }

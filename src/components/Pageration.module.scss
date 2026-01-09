@@ -1,8 +1,36 @@
 @use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
 
 .pagination {
   display: flex;
   gap: $spacing-2;
   justify-content: center;
   margin-top: $spacing-4;
+  color: $gray-1500;
+
+  button {
+    background: $white;
+    border-radius: $border-radius-full;
+    border: none;
+    color: $gray-1500;
+    padding: $spacing-2 $spacing-4;
+    cursor: pointer;
+    font-size: $font-size-2;
+    font-weight: $font-weight-regular;
+    line-height: $line-height-2;
+    @include transition(background-color, color);
+
+    &:hover:not(:disabled) {
+      background-color: $gray-400;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &.active {
+      background-color: $gray-400;
+    }
+  }
 }

@@ -7,7 +7,7 @@
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
-    box-shadow: $shadow-md;
+    box-shadow: $shadow-lg;
   }
 }
 
@@ -25,7 +25,7 @@
   }
 
   h4 {
-    @include body-3-regular;
+    @include body-1-regular;
 
     display: flex;
     align-items: center;
@@ -35,7 +35,7 @@
   }
 
   p {
-    @include body-2-regular;
+    @include body-1-regular;
 
     display: flex;
     align-items: center;
