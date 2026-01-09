@@ -8,7 +8,6 @@
 .swiperContainer {
   position: relative;
   overflow: hidden;
-  border-radius: $border-radius-lg;
 }
 
 .swiperTrack {
@@ -34,7 +33,6 @@
   width: 200px;
   height: 120px;
   overflow: hidden;
-  border-radius: $border-radius-base;
   scroll-snap-align: start;
   pointer-events: none;
 

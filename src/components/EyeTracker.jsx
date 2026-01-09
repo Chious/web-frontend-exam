@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import style from "./EyeTracker.module.scss";
 import leftEye from "@/assets/LeftEye-01.svg?w=32&h=auto&format=webp";
 import rightEye from "@/assets/RightEye-01.svg?w=32&h=auto&format=webp";
-import character from "@/assets/Character-01.png?w=1097&h=823format=webp";
+import character from "@/assets/Character-01.png?w=1097&h=823&format=webp";
 
 export default function EyeTracker() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
