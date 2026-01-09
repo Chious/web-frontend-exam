@@ -15,11 +15,9 @@ import {
 import Pageration from "@/components/Pageration";
 import JobCard from "@/components/JobCard";
 import SearchBar from "@/components/SearchBar";
+import EyeTracker from "@/components/EyeTracker";
 import mainBg from "@/assets/Background-01.png?w=1024&h=auto&format=webp";
-import leftEye from "@/assets/LeftEye-01.png?w=40&h=auto&format=webp";
-import rightEye from "@/assets/RightEye-01.png?w=40&h=auto&format=webp";
-import logo from "@/assets/Logo-01.png?w=1024&h=auto&format=webp";
-import character from "@/assets/Character-01.png?w=1024&h=auto&format=webp";
+import logo from "@/assets/Logo-01.svg?w=1024&h=auto&format=webp";
 import style from "./Home.module.scss";
 
 const Modal = lazy(() => import("@/components/Modal"));
@@ -70,7 +68,6 @@ export default function Home() {
   useEffect(() => {
     const handleResize = () => {
       const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT;
-      console.log("newIsMobile", newIsMobile);
       if (newIsMobile !== isMobile) {
         setIsMobile(newIsMobile);
         setCurrentPage(1); // 重置到第一頁當裝置類型改變時
@@ -151,27 +148,10 @@ export default function Home() {
 
   return (
     <div className={style.main}>
+      <img src={mainBg} alt="main-bg" className={style.mainBg} />
       <div className={style.mainBgContainer}>
-        <div className={style.characterContainer}>
-          <img src={character} alt="character" className={style.character} />
-          <img
-            src={leftEye}
-            alt="left-eye"
-            width={40}
-            height={40}
-            className={`${style.leftEye}`}
-          />
-          <img
-            src={rightEye}
-            alt="right-eye"
-            width={40}
-            height={40}
-            className={`${style.rightEye}`}
-          />
-        </div>
-
-        <img src={logo} alt="logo" />
-        <img src={mainBg} alt="main-bg" />
+        <EyeTracker />
+        <img src={logo} alt="logo" className={style.logo} />
       </div>
       <section className={style.searchDashboard}>
         <h2 className={style.sectionTitle}>適合前端工程師的好工作</h2>
@@ -225,11 +205,13 @@ export default function Home() {
             ))}
         </div>
 
-        <Pageration
-          totalPages={totalPages}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-        />
+        {!isErrorJobs && jobs && jobs.data && jobs.data.length > 0 && (
+          <Pageration
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
+        )}
       </section>
       <Suspense fallback={null}>
         <Modal

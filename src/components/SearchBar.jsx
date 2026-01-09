@@ -33,9 +33,10 @@ export default function SearchBar({
         label="公司名稱"
         value={values.companyName}
         onChange={(e) => setValue("companyName", e.target.value)}
+        size="small"
       />
 
-      <FormControl>
+      <FormControl size="small">
         <InputLabel id="education-level-select-label" shrink>
           教育程度
         </InputLabel>
@@ -59,7 +60,7 @@ export default function SearchBar({
         </Select>
       </FormControl>
 
-      <FormControl>
+      <FormControl size="small">
         <InputLabel id="salary-level-select-label" shrink>
           薪水範圍
         </InputLabel>
