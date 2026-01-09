@@ -16,6 +16,7 @@ import Pageration from "@/components/Pageration";
 import JobCard from "@/components/JobCard";
 import SearchBar from "@/components/SearchBar";
 import EyeTracker from "@/components/EyeTracker";
+import { useAuth } from "@/providers/auth-provider";
 import mainBg from "@/assets/Background-01.png?w=1024&h=auto&format=webp";
 import logo from "@/assets/Logo-01.svg?w=1024&h=auto&format=webp";
 import style from "./Home.module.scss";
@@ -26,10 +27,10 @@ const MOBILE_BREAKPOINT = 600;
 const PER_PAGE_MOBILE = 4;
 const PER_PAGE_DESKTOP = 6;
 
-// TODO: 2. Background Animate
 // TODO: 3. Image Optmize
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
@@ -123,6 +124,7 @@ export default function Home() {
         educationLevel: appliedFilters.educationLevel || undefined,
         salaryLevel: appliedFilters.salaryLevel || undefined,
       }),
+    enabled: isAuthenticated,
     placeholderData: (previousData) => previousData, // Keep previous data while loading
   });
 
@@ -139,11 +141,13 @@ export default function Home() {
   const { data: educationLevels } = useQuery({
     queryKey: ["educationLevels"],
     queryFn: () => fetchEducationLevels(),
+    enabled: isAuthenticated,
   });
 
   const { data: salaryLevels } = useQuery({
     queryKey: ["salaryLevels"],
     queryFn: () => fetchSalaryLevels(),
+    enabled: isAuthenticated,
   });
 
   return (

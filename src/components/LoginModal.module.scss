@@ -1,0 +1,62 @@
+@use "@/styles/variables" as *;
+
+.loginModalBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loginModal {
+  background-color: $white;
+  padding: $spacing-4;
+  border-radius: $border-radius-base;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  min-width: 320px;
+  max-width: 400px;
+
+  h2 {
+    margin-top: 0;
+    margin-bottom: $spacing-3;
+    font-size: $font-size-3;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-1;
+    font-size: $font-size-1;
+  }
+
+  input {
+    padding: $spacing-1;
+    border-radius: $border-radius-sm;
+    border: 1px solid $gray-400;
+    font-size: $font-size-1;
+  }
+
+  .loginError {
+    color: $error-color;
+    font-size: $font-size-1;
+  }
+
+  button[type="submit"] {
+    margin-top: $spacing-1;
+    padding: $spacing-1 $spacing-2;
+    border-radius: $border-radius-sm;
+    border: none;
+    background-color: $primary-color;
+    color: $white;
+    font-size: $font-size-1;
+    cursor: pointer;
+  }
+}

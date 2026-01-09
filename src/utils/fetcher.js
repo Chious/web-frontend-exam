@@ -14,6 +14,23 @@ export const fetcher = async (url) => {
 };
 
 /**
+ * Base POST fetcher function
+ * @param {string} url - API endpoint
+ * @param {any} body - Request body (will be JSON.stringified)
+ * @returns {Promise<Response>} - Raw fetch Response
+ */
+export const postFetcher = async (url, body) => {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  return response;
+};
+
+/**
  * Fetch job list with optional filters and pagination
  * @param {Object} params - Query parameters
  * @param {number} [params.page] - Page number
@@ -70,4 +87,21 @@ export const fetchEducationLevels = async () => {
 export const fetchSalaryLevels = async () => {
   const url = `${API_BASE}/salaryLevelList`;
   return fetcher(url);
+};
+
+/**
+ * Login and get auth token
+ * @param {{username: string, password: string}} params
+ * @returns {Promise<{token: string}>}
+ */
+export const login = async ({ username, password }) => {
+  const url = `${API_BASE}/login`;
+  const response = await postFetcher(url, { username, password });
+
+  if (!response.ok) {
+    return response;
+  }
+
+  const data = await response.json();
+  return data;
 };

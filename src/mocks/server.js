@@ -1,7 +1,12 @@
-import { Factory, Model, Server } from "miragejs";
+import { Factory, Model, Response, Server } from "miragejs";
 import jobList from "@/constants/jobList";
 import educationList from "@/constants/educationList";
 import salaryList from "@/constants/salaryList";
+import {
+  DEFAULT_USERNAME,
+  DEFAULT_PASSWORD,
+  createBearerToken,
+} from "@/constants/auth";
 
 const filterFormat = (data, companyName, educationLevel, salaryLevel) => {
   let result = data;
@@ -75,6 +80,23 @@ export function setupMockServer() {
     },
     routes() {
       this.namespace = "api/v1";
+
+      this.post("/login", (schema, request) => {
+        const { username, password } = JSON.parse(request.requestBody || "{}");
+
+        if (username === DEFAULT_USERNAME && password === DEFAULT_PASSWORD) {
+          const token = createBearerToken(username);
+          return {
+            token,
+          };
+        }
+
+        return new Response(
+          401,
+          { "Content-Type": "application/json" },
+          { error: "Invalid Account or Password" },
+        );
+      });
 
       this.get("/jobs", (schema, request) => {
         // * filter

@@ -1,12 +1,13 @@
 import { ReactQueryProvider } from "@/providers/react-query-provider";
 import Home from "@/pages/Home";
-
-// TODO: Implement Login Auth Flow, Auth Guard
+import { AuthProvider } from "@/providers/auth-provider";
 
 function App() {
   return (
     <ReactQueryProvider>
-      <Home />
+      <AuthProvider>
+        <Home />
+      </AuthProvider>
     </ReactQueryProvider>
   );
 }
